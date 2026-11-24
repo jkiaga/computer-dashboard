@@ -58,12 +58,9 @@
 
   // ---- Group drop-down ----
   function renderGroupSelect() {
-    // Counts come from the loaded devices so they match what the table shows
-    const counts = {};
-    for (const d of devices) {
-      if (d.site) counts[d.site] = (counts[d.site] || 0) + 1;
-    }
-    const extras = Object.keys(counts).filter(s => !groupList.includes(s));
+    // Include sites that exist on devices but aren't in the standard list
+    const extras = [...new Set(devices.map(d => d.site).filter(Boolean))]
+      .filter(s => !groupList.includes(s));
     const names = [...groupList, ...extras];
 
     // A selected group that no longer exists falls back to "All groups"
@@ -77,7 +74,7 @@
     for (const name of names) {
       const opt = document.createElement('option');
       opt.value = name;
-      opt.textContent = `${name} (${counts[name] || 0})`;
+      opt.textContent = name;
       groupSelect.appendChild(opt);
     }
     groupSelect.value = groupFilter;
