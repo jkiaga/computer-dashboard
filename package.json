@@ -1,0 +1,12 @@
+{
+  "name": "computers-dashboard",
+  "version": "1.0.0",
+  "description": "Lightweight IP monitoring dashboard for domain and POS devices",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  }
+}
