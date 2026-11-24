@@ -4,7 +4,7 @@
   const searchInput = document.getElementById('search');
   const statusText = document.getElementById('status-text');
   const btnRefresh = document.getElementById('btn-refresh');
-  const groupBar = document.getElementById('group-bar');
+  const groupSelect = document.getElementById('group-select');
   const modal = document.getElementById('modal');
   const modalHostname = document.getElementById('modal-hostname');
   const editUsername = document.getElementById('edit-username');
@@ -56,38 +56,31 @@
       .replace(/"/g, '&quot;');
   }
 
-  // ---- Group bar ----
-  function renderGroupBar() {
-    if (filter !== 'pos') {
-      groupBar.hidden = true;
-      return;
+  // ---- Group drop-down ----
+  function renderGroupSelect() {
+    // Counts come from the loaded devices so they match what the table shows
+    const counts = {};
+    for (const d of devices) {
+      if (d.site) counts[d.site] = (counts[d.site] || 0) + 1;
     }
-    groupBar.hidden = false;
+    const extras = Object.keys(counts).filter(s => !groupList.includes(s));
+    const names = [...groupList, ...extras];
 
-    // Keep "All groups" chip, rebuild the rest
-    const allChip = groupBar.querySelector('[data-group=""]');
-    groupBar.innerHTML = '';
-    groupBar.appendChild(allChip || (() => {
-      const b = document.createElement('button');
-      b.className = 'group-chip' + (groupFilter === '' ? ' active' : '');
-      b.dataset.group = '';
-      b.textContent = 'All groups';
-      return b;
-    })());
+    // A selected group that no longer exists falls back to "All groups"
+    if (groupFilter && !names.includes(groupFilter)) groupFilter = '';
 
-    // Ensure All groups state
-    const all = groupBar.querySelector('[data-group=""]');
-    all.classList.toggle('active', groupFilter === '');
+    groupSelect.innerHTML = '';
+    const all = document.createElement('option');
+    all.value = '';
     all.textContent = 'All groups';
-
-    for (const name of groupList) {
-      const count = groupCounts[name] || 0;
-      const btn = document.createElement('button');
-      btn.className = 'group-chip' + (groupFilter === name ? ' active' : '');
-      btn.dataset.group = name;
-      btn.innerHTML = `${escapeHtml(name)}<span class="chip-count">${count}</span>`;
-      groupBar.appendChild(btn);
+    groupSelect.appendChild(all);
+    for (const name of names) {
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = `${name} (${counts[name] || 0})`;
+      groupSelect.appendChild(opt);
     }
+    groupSelect.value = groupFilter;
   }
 
   // ---- Table ----
@@ -97,7 +90,7 @@
     if (filter === 'domain' || filter === 'pos') {
       list = list.filter(d => d.type === filter);
     }
-    if (filter === 'pos' && groupFilter) {
+    if (groupFilter) {
       list = list.filter(d => d.site === groupFilter);
     }
 
@@ -134,7 +127,7 @@
     document.getElementById('badge-pos').textContent =
       devices.filter(d => d.type === 'pos').length;
 
-    renderGroupBar();
+    renderGroupSelect();
 
     document.querySelectorAll('th[data-sort]').forEach(th => {
       th.classList.remove('sorted-asc', 'sorted-desc');
@@ -286,15 +279,12 @@
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       filter = tab.dataset.filter;
-      groupFilter = ''; // reset group when switching tabs
       render();
     });
   });
 
-  groupBar.addEventListener('click', e => {
-    const chip = e.target.closest('.group-chip');
-    if (!chip) return;
-    groupFilter = chip.dataset.group || '';
+  groupSelect.addEventListener('change', () => {
+    groupFilter = groupSelect.value;
     render();
   });
 

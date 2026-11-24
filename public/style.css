@@ -166,7 +166,7 @@ html, body {
 }
 
 .btn:hover { background: var(--hover); }
-.btn:focus-visible, .tab:focus-visible, .group-chip:focus-visible, .btn-icon:focus-visible {
+.btn:focus-visible, .tab:focus-visible, .btn-icon:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px var(--focus);
 }
@@ -180,37 +180,33 @@ html, body {
 }
 .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
 
-/* Site filter (POS) */
-.group-bar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  padding: 10px 0 0;
-}
+/* Group drop-down */
+.toolbar-actions { display: flex; align-items: center; gap: 8px; }
 
-.group-bar[hidden] { display: none; }
-
-.group-chip {
-  height: 26px;
-  padding: 0 10px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text-muted);
+.group-select-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 12px;
-  font-family: inherit;
+  color: var(--text-muted);
+}
+
+.group-select {
+  height: 28px;
+  max-width: 220px;
+  padding: 0 8px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius);
+  color: var(--text);
+  font-size: 13px;
+  font-family: inherit;
   cursor: pointer;
+  outline: none;
 }
 
-.group-chip:hover { background: var(--hover); color: var(--text); }
-
-.group-chip.active {
-  background: var(--text);
-  border-color: var(--text);
-  color: var(--surface);
-}
-
-.group-chip .chip-count { opacity: 0.65; margin-left: 6px; font-size: 11px; }
+.group-select:hover { background: var(--hover); }
+.group-select:focus-visible { border-color: var(--accent); box-shadow: 0 0 0 2px var(--focus); }
 
 /* Table */
 .main { flex: 1; padding-top: 12px; }

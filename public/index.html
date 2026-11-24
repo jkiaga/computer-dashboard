@@ -35,6 +35,12 @@
         </button>
       </div>
       <div class="toolbar-actions">
+        <label class="group-select-wrap" for="group-select">
+          <span>Group</span>
+          <select id="group-select" class="group-select">
+            <option value="">All groups</option>
+          </select>
+        </label>
         <button class="btn btn-ghost" id="btn-refresh" title="Refresh now">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/>
@@ -42,12 +48,6 @@
           Refresh
         </button>
       </div>
-    </div>
-
-    <!-- POS group filters (shown only when POS tab is active) -->
-    <div class="group-bar" id="group-bar" hidden>
-      <button class="group-chip active" data-group="">All groups</button>
-      <!-- chips injected by JS -->
     </div>
 
     <main class="main">
